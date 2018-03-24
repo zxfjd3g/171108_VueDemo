@@ -24,13 +24,14 @@
   import TodoHeader from './components/TodoHeader.vue'
   import TodoList from './components/TodoList.vue'
   import TodoFooter from './components/TodoFooter.vue'
+  import storageUtil from './util/storageUtil'
 
   export default {
 
     data () {
       return {
         // 从localStorage读取todos
-        todos: JSON.parse(window.localStorage.getItem('todos_key') || '[]')
+        todos: storageUtil.readTodos()
       }
     },
 
@@ -84,10 +85,15 @@
     watch: { // 监视
       todos: {
         deep: true, //深度监视
-        handler: function (value) {
+        /*handler: function (value) {
           // 将todos最新的值的json数据, 保存到localStorage
-          window.localStorage.setItem('todos_key', JSON.stringify(value))
-        }
+          //window.localStorage.setItem('todos_key', JSON.stringify(value))
+          storageUtil.saveTodos(value)
+        }*/
+        handler: storageUtil.saveTodos,
+        /*handler: function(todos) {
+          window.localStorage.setItem(TODOS_KEY, JSON.stringify(todos))
+        },*/
       }
     },
 
