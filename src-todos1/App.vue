@@ -1,26 +1,14 @@
 <template>
   <div class="todo-container">
     <div class="todo-wrap">
-     <!-- <TodoHeader @addTodo="addTodo"/>--><!--给TodoHeader标签对象绑定addTodo事件监听-->
-      <TodoHeader ref="header"/>
-      <TodoList :todos="todos"/>
-      <todo-footer>
-        <input type="checkbox" v-model="isAllCheck" slot="checkAll"/>
-        <span slot="count">已完成{{completeSize}} / 全部{{todos.length}}</span>
-        <button class="btn btn-danger" v-show="completeSize" @click="deleteCompleteTodos" slot="delete">清除已完成任务</button>
-      </todo-footer>
+      <TodoHeader :addTodo="addTodo"/>
+      <TodoList :todos="todos" :deleteTodo="deleteTodo"/>
+      <todo-footer :todos="todos" :deleteCompleteTodos="deleteCompleteTodos" :selectAllTodos="selectAllTodos"/>
     </div>
   </div>
 </template>
-<!--
-绑定事件监听  ----订阅消息
-触发事件  ----发布消息
 
-
-
--->
 <script>
-  import PubSub from 'pubsub-js'
   import TodoHeader from './components/TodoHeader.vue'
   import TodoList from './components/TodoList.vue'
   import TodoFooter from './components/TodoFooter.vue'
@@ -32,33 +20,6 @@
         // 从localStorage读取todos
         todos: JSON.parse(window.localStorage.getItem('todos_key') || '[]')
       }
-    },
-
-    computed: {
-      completeSize () {
-        return this.todos.reduce((preTotal, todo) => preTotal + (todo.complete?1:0), 0)
-      },
-
-      isAllCheck: {
-        get () {
-          return this.completeSize===this.todos.length && this.completeSize>0
-        },
-
-        set (value) {// value是当前checkbox最新的值
-          this.selectAllTodos(value)
-        }
-      }
-    },
-
-    mounted () {// 执行异步代码
-      // 给<TodoHeader/>绑定addTodo事件监听
-      //this.$on('addTodo', this.addTodo)  // 给App绑定的监听, 不对
-      this.$refs.header.$on('addTodo', this.addTodo)
-
-      // 订阅消息
-      PubSub.subscribe('deleteTodo', (msg, index) => {
-        this.deleteTodo(index)
-      })
     },
 
     methods: {
