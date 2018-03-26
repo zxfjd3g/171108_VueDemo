@@ -8,6 +8,7 @@ import About from '../views/About.vue'
 import Home from '../views/Home.vue'
 import News from '../views/News.vue'
 import Message from '../views/Message.vue'
+import MessageDetail from '../views/MessageDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +30,13 @@ export default new VueRouter({
         },
         {
           path: 'message', // 简化写法
-          component: Message
+          component: Message,
+          children: [
+            {
+              path: '/home/message/detail/:id',
+              component: MessageDetail
+            }
+          ]
         },
 
         {

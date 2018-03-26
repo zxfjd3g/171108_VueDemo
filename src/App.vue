@@ -16,7 +16,9 @@
       <div class="col-xs-6">
         <div class="panel">
           <div class="panel-body">
-            <router-view></router-view>
+            <keep-alive>
+              <router-view msg="abc"></router-view>
+            </keep-alive>
           </div>
         </div>
       </div>
@@ -25,6 +27,7 @@
 </template>
 
 <script>
+
   export default {}
 </script>
 
